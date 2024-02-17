@@ -5,6 +5,9 @@ const createUser = db.createUser;
 const createPlace = db.createPlace;
 const fetchUsers = db.fetchUsers;
 const fetchPlaces = db.fetchPlaces;
+const createVacation = db.createVacation;
+const fetchVacations = db.fetchVacations;
+const destroyVacation = db.destroyVacation;
 
 const init = async()=> {
     console.log('connecting to database');
@@ -23,6 +26,14 @@ const init = async()=> {
     ]);
     console.log(await fetchUsers());
     console.log(await fetchPlaces());
+    const vacation = await createVacation({
+        departure_date: '03/15/2024',
+        place_id: dallas.id,
+        user_id: lucy.id
+    });
+    console.log(await fetchVacations(lucy.id));
+    await destroyVacation(vacation);
+    console.log(await fetchVacations(lucy.id));
 };
 
 

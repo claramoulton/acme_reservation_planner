@@ -65,11 +65,48 @@ const fetchPlaces = async()=> {
     return response.rows;
 };
 
+const fetchVacations = async(user_id)=> {
+    const SQL = `
+        SELECT *
+        FROM vacations
+        WHERE user_id = $1
+    `;
+    const response = await client.query(SQL, [user_id ]);
+    return response.rows;
+};
+
+const destroyVacation = async(vacation)=> {
+    const SQL = `
+        DELETE FROM vacations
+        WHERE id=$1 AND user_id=$2
+    `;
+    await client.query(SQL, [vacation.id, vacation.user_id]);
+};
+
+const createVacation = async({ departure_date, user_id, place_id })=> {
+    const SQL = `
+        INSERT INTO vacations(id, departure_date, user_id, place_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+    `;
+    const response = await client.query(SQL, [
+        uuid.v4(), 
+        departure_date,
+        user_id,
+        place_id
+        ]);
+    return response.rows[0];
+};
+
+
 module.exports = {
     client,
     createTables,
     createUser,
     createPlace,
     fetchUsers,
-    fetchPlaces
+    fetchPlaces,
+    fetchVacations,
+    createVacation,
+    destroyVacation
 };
