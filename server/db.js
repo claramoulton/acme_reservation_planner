@@ -81,6 +81,7 @@ const destroyVacation = async(vacation)=> {
         WHERE id=$1 AND user_id=$2
     `;
     await client.query(SQL, [vacation.id, vacation.user_id]);
+    
 };
 
 const createVacation = async({ departure_date, user_id, place_id })=> {
@@ -90,11 +91,11 @@ const createVacation = async({ departure_date, user_id, place_id })=> {
         RETURNING *
     `;
     const response = await client.query(SQL, [
-        uuid.v4(), 
+        uuid.v4(),
         departure_date,
         user_id,
         place_id
-        ]);
+    ]);
     return response.rows[0];
 };
 
